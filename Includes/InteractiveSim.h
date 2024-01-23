@@ -5,18 +5,10 @@ private:
 SDL_Window* win;
 SDL_Renderer* ren;
 SDL_Texture * bgr,*ents;
-/*
-Collider* arena;
-std::list<Grenade*> grenadeList;
-std::list<Missile*> missileList;
-std::list<Entity*> entList;
-Entity* worldMassParticle;
-*/
-std::list<Gun*> gunList;
-std::list<GLauncher*> gLauncherList;
-std::list<MLauncher*> mLauncherList;
-
+Container* cont;
+EntityBox* box;
 Arsenal* playground;
+PhysicsEngine* engine;
 SDL_Color bgrclr;
 float maxSpeed, maxSize, ammount,maxMass, airDensity,maxcharge;
 int genCount;

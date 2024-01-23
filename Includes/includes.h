@@ -20,6 +20,7 @@
 #include "MLauncher.h"
 #include "physicsAux.h"
 #include <list>
+#include "container.h"
 #include "physEngine.h"
 #include "EntityMgmnt.h"
 #include "entityBox.h"

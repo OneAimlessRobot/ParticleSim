@@ -19,77 +19,85 @@
 #include "../Includes/GLauncher.h"
 #include "../Includes/MLauncher.h"
 #include "../Includes/physicsAux.h"
+#include "../Includes/container.h"
 #include "../Includes/physEngine.h"
 #include "../Includes/EntityMgmnt.h"
-#include "../Includes/entityBox.h"
 
-PhysicsEngine::PhysicsEngine(EntityBox*box){
+PhysicsEngine::PhysicsEngine(Container*cont){
 
-	this->box=box;
+	this->cont=cont;
 
 }
 
+void PhysicsEngine::updateEntities(int collisions,int gravity,int drag,int electricity,float tx, float ty){
+
+	handleMovements(collisions,gravity,drag,electricity);
+	monitorGrenades();
+	monitorMissiles(tx,ty);
+
+
+}
 
 void PhysicsEngine::handleCollisions(int collisionsEnabled){
 
     //broken. Maybe will fix
     if(collisionsEnabled){
-    deleteFreaks<Entity>(box->getEntityList());
-    deleteFreaks<Grenade>(box->getGrenadeList());
-      handleInterparticleCollisions<Entity>(box->getEntityList());
-      handleInterparticleCollisions<Grenade>(box->getGrenadeList());
-      handleInterparticleCollisions<Missile>(box->getMissileList());
+    deleteFreaks<Entity>(cont->getEntityList());
+    deleteFreaks<Grenade>(cont->getGrenadeList());
+      handleInterparticleCollisions<Entity>(cont->getEntityList());
+      handleInterparticleCollisions<Grenade>(cont->getGrenadeList());
+      handleInterparticleCollisions<Missile>(cont->getMissileList());
     }
 
-    deleteFreaks<Entity>(box->getEntityList());
-    deleteFreaks<Grenade>(box->getGrenadeList());
-    deleteFreaks<Missile>(box->getMissileList());
-     handleCollisionsWithArena<Entity>(box->getEntityList());
-    handleCollisionsWithArena<Grenade>(box->getGrenadeList());
-    handleCollisionsWithArena<Missile>(box->getMissileList());
+    deleteFreaks<Entity>(cont->getEntityList());
+    deleteFreaks<Grenade>(cont->getGrenadeList());
+    deleteFreaks<Missile>(cont->getMissileList());
+     handleCollisionsWithArena<Entity>(cont->getEntityList());
+    handleCollisionsWithArena<Grenade>(cont->getGrenadeList());
+    handleCollisionsWithArena<Missile>(cont->getMissileList());
 
 }
 void PhysicsEngine::handleForces(int gravityEnabled,int dragEnabled,int electricity){
 	
     if(gravityEnabled){
-    deleteFreaks<Entity>(box->getEntityList());
-    deleteFreaks<Grenade>(box->getGrenadeList());
-    deleteFreaks<Missile>(box->getMissileList());
-      handleInterparticleGravity<Entity>(box->getEntityList());
-      handleInterparticleGravity<Grenade>(box->getGrenadeList());
-      handleInterparticleGravity<Missile>(box->getMissileList());
+    deleteFreaks<Entity>(cont->getEntityList());
+    deleteFreaks<Grenade>(cont->getGrenadeList());
+    deleteFreaks<Missile>(cont->getMissileList());
+      handleInterparticleGravity<Entity>(cont->getEntityList());
+      handleInterparticleGravity<Grenade>(cont->getGrenadeList());
+      handleInterparticleGravity<Missile>(cont->getMissileList());
 
 
 
     }
     if(dragEnabled){
-    deleteFreaks<Entity>(box->getEntityList());
+    deleteFreaks<Entity>(cont->getEntityList());
 
-    handleDrag<Entity>(box->getEntityList());
-    deleteFreaks<Grenade>(box->getGrenadeList());
-    handleDrag<Grenade>(box->getGrenadeList());
+    handleDrag<Entity>(cont->getEntityList());
+    deleteFreaks<Grenade>(cont->getGrenadeList());
+    handleDrag<Grenade>(cont->getGrenadeList());
 
-    deleteFreaks<Missile>(box->getMissileList());
-    handleDrag<Missile>(box->getMissileList());
+    deleteFreaks<Missile>(cont->getMissileList());
+    handleDrag<Missile>(cont->getMissileList());
     }
     if(gravityEnabled){
-    deleteFreaks<Entity>(box->getEntityList());
+    deleteFreaks<Entity>(cont->getEntityList());
 
-    handleGroundGravity<Entity>(box->getEntityList());
+    handleGroundGravity<Entity>(cont->getEntityList());
 
-    deleteFreaks<Grenade>(box->getGrenadeList());
-    handleGroundGravity<Grenade>(box->getGrenadeList());
-    deleteFreaks<Missile>(box->getMissileList());
-    handleGroundGravity<Missile>(box->getMissileList());
+    deleteFreaks<Grenade>(cont->getGrenadeList());
+    handleGroundGravity<Grenade>(cont->getGrenadeList());
+    deleteFreaks<Missile>(cont->getMissileList());
+    handleGroundGravity<Missile>(cont->getMissileList());
 
     }
     if(electricity){
-    deleteFreaks<Entity>(box->getEntityList());
-    deleteFreaks<Grenade>(box->getGrenadeList());
-    deleteFreaks<Missile>(box->getMissileList());
-      handleInterparticleElectricity<Entity>(box->getEntityList());
-      handleInterparticleElectricity<Grenade>(box->getGrenadeList());
-      handleInterparticleElectricity<Missile>(box->getMissileList());
+    deleteFreaks<Entity>(cont->getEntityList());
+    deleteFreaks<Grenade>(cont->getGrenadeList());
+    deleteFreaks<Missile>(cont->getMissileList());
+      handleInterparticleElectricity<Entity>(cont->getEntityList());
+      handleInterparticleElectricity<Grenade>(cont->getGrenadeList());
+      handleInterparticleElectricity<Missile>(cont->getMissileList());
 
     }
 
@@ -104,5 +112,61 @@ void PhysicsEngine::handleMovements(int collisionsEnabled,int gravityEnabled,int
 
 }
 PhysicsEngine::~PhysicsEngine(){
+
+}
+
+void PhysicsEngine::printSpeedsAndPosEnts(){
+
+
+    std::list<Entity*>::iterator it;
+    for (it = cont->getEntityList().begin(); it != cont->getEntityList().end(); ++it) {
+       std::cout<<"Posição: (x,y)= ("<<(*it)->getPos().x<<" , "<<(*it)->getPos().y<<")\n";
+       std::cout<<"Velocidade: "<<GVector::getNorm((*it)->getVec())<<"\n";
+       std::cout<<"Coeficientes: \n";
+       std::cout<<"Elasticidade: "<<1-(*it)->getElasticity()<<"\n";
+       std::cout<<"Massa: "<<(*it)->getMass()<<"\n";
+       std::cout<<"Carga: "<<(*it)->getCharge()<<"\n";
+       std::cout<<"Coeficiente de resis. do ar: "<<(*it)->getDragConstant()<<"\n";
+
+
+}
+	
+
+
+}
+float PhysicsEngine::getTotalEnergyEnts(){
+
+	return getTotalEnergy<Entity>(this->cont->getEntityList());
+
+
+
+}
+
+void PhysicsEngine::monitorGrenades(){
+	std::list<Grenade*>::iterator it2;
+	for(it2= cont->getGrenadeList().begin();it2!= cont->getGrenadeList().end();++it2){
+
+		if((*it2)->blowingUp()){
+
+			doBlast<Entity>(cont->getEntityList(),(*it2)->getCenter().x,(*it2)->getCenter().y,(*it2)->getForce());
+		}
+		(*it2)->update();
+	}
+
+
+
+}
+void PhysicsEngine::monitorMissiles(float tx,float ty){
+	std::list<Missile*>::iterator it2;
+	for(it2= cont->getMissileList().begin();it2!= cont->getMissileList().end();++it2){
+
+		if((*it2)->blowingUp()){
+
+			doBlast<Entity>(cont->getEntityList(),(*it2)->getCenter().x,(*it2)->getCenter().y,(*it2)->getForce());
+		}
+		(*it2)->update(tx,ty);
+	}
+
+
 
 }

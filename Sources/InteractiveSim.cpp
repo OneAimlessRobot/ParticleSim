@@ -20,6 +20,7 @@
 #include "../Includes/MLauncher.h"
 #include "../Includes/physicsAux.h"
 #include "../Includes/EntityMgmnt.h"
+#include "../Includes/container.h"
 #include "../Includes/physEngine.h"
 #include "../Includes/entityBox.h"
 #include "../Includes/arsenal.h"
@@ -102,9 +103,10 @@ this->drag=0;
 this->gravity=0;
 this->electricity=0;
 
-this->playground=new Arsenal(new EntityBox(maxSpeed,maxSize,ammount,maxMass,airDensity, maxcharge));
-this->playground->getBox()->setPhysicsEngine(new PhysicsEngine(this->playground->getBox()));
-
+this->cont=new Container(maxSpeed,maxSize,ammount,maxMass,airDensity, maxcharge);
+this->playground=new Arsenal(cont);
+this->box= new EntityBox(maxSpeed,maxSize,ammount,maxMass,airDensity, maxcharge,cont);
+this->engine=new PhysicsEngine(cont);
 }
 
 InteractiveSim* InteractiveSim::parseGame(){
@@ -196,10 +198,13 @@ void InteractiveSim::handleEntities(){
 
     if(!this->pause){
     
-    playground->getBox()->updateEntities(collisions,gravity,drag,electricity,this->mouseX*1.0f,this->mouseY*1.0f);
+    box->updateEntities();
+    engine->updateEntities(collisions,gravity,drag,electricity,this->mouseX*1.0f,this->mouseY*1.0f);
     playground->monitorGuns((float)this->mouseX,(float)this->mouseY);
     if(this->selection){
-    playground->getBox()->generationHandling();
+	
+    float selectQuality=engine->getAverageSpeed<Entity>(cont->getEntityList());
+    box->generationHandling(selectQuality);
     }
     }
     
@@ -212,14 +217,14 @@ void InteractiveSim::doRendering(){
     SDL_RenderClear(ren);
     SDL_SetRenderTarget(ren,ents);
     SDL_RenderCopy(ren,bgr,NULL,NULL);
-    playground->render(ren);
+    cont->render(ren);
     SDL_SetRenderTarget(ren,NULL);
     SDL_RenderCopy(ren,ents,NULL,NULL);
     SDL_RenderPresent(ren);
 
 }
 void InteractiveSim::handleContPresses(const Uint8*KEYS){
-    if(KEYS[SDL_SCANCODE_LEFT]) {
+  /*  if(KEYS[SDL_SCANCODE_LEFT]) {
         std::thread orbitWorker(&EntityBox::orbit,this->playground->getBox(),mouseX*1.0,mouseY*1.0);
         orbitWorker.detach();
     }
@@ -232,7 +237,8 @@ void InteractiveSim::handleContPresses(const Uint8*KEYS){
         std::thread blastingWorker(&EntityBox::blast,this->playground->getBox(),this->mouseX*1.0,this->mouseY*1.0);
         blastingWorker.detach();
     }
-    if(KEYS[SDL_SCANCODE_DOWN]) {
+    */
+	if(KEYS[SDL_SCANCODE_DOWN]) {
         std::thread shootingWorker(&Arsenal::shootGuns,this->playground);
         shootingWorker.detach();
     //std::cout<<"Mouse (X,Y): ("<<this->mouseX<<" , "<<this->mouseY<<")\n";
@@ -249,7 +255,7 @@ void InteractiveSim::printSimVarsAndStats(){
     std::cout<<"Atrito do ar ativo?: "<<this->drag<<"\n";
     std::cout<<"Colisões ativas?: "<<this->collisions<<"\n";
     std::cout<<"Eletricidade ativa?: "<<this->electricity<<"\n";
-    playground->getBox()->printBox();
+    box->printBox();
 
 }
 
@@ -290,7 +296,7 @@ void InteractiveSim::handleToggles(const Uint8*KEYS){
         /*std::thread printing(&InteractiveSim::printSpeedsAndPos,this);
         printing.detach();
     	*/
-	playground->getBox()->printSpeedsAndPos();
+	engine->printSpeedsAndPosEnts();
 	}
     if(KEYS[SDL_SCANCODE_P]) {
     if(this->pause){
@@ -301,12 +307,12 @@ void InteractiveSim::handleToggles(const Uint8*KEYS){
     }
     }
     if(KEYS[SDL_SCANCODE_J]) {
-        playground->getBox()->getTotalEnergy();
+        engine->getTotalEnergyEnts();
 //        std::thread showEnergy(&InteractiveSim::getTotalEnergy,this);
 //        showEnergy.detach();
     }
     if(KEYS[SDL_SCANCODE_S]) {
-    playground->getBox()->addEnt(this->mouseX*1.0f,this->mouseY*1.0f);
+    cont->addEnt(this->mouseX*1.0f,this->mouseY*1.0f);
     }
     if(KEYS[SDL_SCANCODE_R]) {
     if(this->rendering){
@@ -370,12 +376,12 @@ void InteractiveSim::handleToggles(const Uint8*KEYS){
 
     if(KEYS[SDL_SCANCODE_V]) {
 
-        playground->spawnGLauncher(this->mouseX*1.0f,this->mouseY*1.0f);
+        cont->spawnGLauncher(this->mouseX*1.0f,this->mouseY*1.0f);
 
     }
     if(KEYS[SDL_SCANCODE_X]) {
 
-        playground->spawnMLauncher(this->mouseX*1.0f,this->mouseY*1.0f);
+        cont->spawnMLauncher(this->mouseX*1.0f,this->mouseY*1.0f);
 
     }
     if(KEYS[SDL_SCANCODE_D]) {
@@ -392,7 +398,7 @@ void InteractiveSim::handleToggles(const Uint8*KEYS){
     }
     if(KEYS[SDL_SCANCODE_B]) {
 
-     	playground->getBox()->freezeEveryone();
+     	box->freezeEveryone();
 	
     }
     if(KEYS[SDL_SCANCODE_W]) {
@@ -442,15 +448,15 @@ std::cout<<"Outra- Ou nada?\n";
 std::cin>>choice;
 switch (choice){
     case 0:{
-        playground->getBox()->destroyEntities();
-        playground->destroyGuns();
+        cont->destroyEntities();
+        cont->destroyGuns();
 
     break;
     }
     case 1:{
 
 
-        playground->destroyGuns();
+        cont->destroyGuns();
 
 
     break;
@@ -458,7 +464,7 @@ switch (choice){
     case 2:{
 
 
-        playground->getBox()->destroyEntities();
+        cont->destroyEntities();
 
 
     break;
@@ -494,7 +500,7 @@ std::cout<<"2- Sair do menu\n";
 
 				return;
 		}
-		playground->spawnGun(path,x,y,chosenCaliber);
+		cont->spawnGun(path,x,y,chosenCaliber);
                 }
                 else if(whatToDo==1){
                 Resources::printMenu(Resources::generateMenu(GUNMENU_PATH));
@@ -511,7 +517,9 @@ std::cout<<"2- Sair do menu\n";
 }
 InteractiveSim::~InteractiveSim(){
 
-
+delete cont;
+delete engine;
+delete box;
 delete playground;
 SDL_DestroyTexture(this->bgr);
 SDL_DestroyTexture(this->ents);

@@ -3,6 +3,7 @@
 #include <set>
 #include <cmath>
 #include "../Includes/auxFuncs.h"
+#include "../Includes/allSettings.h"
 #include <iostream>
 #include "../Includes/GVector.h"
 #include "../Includes/Entity.h"

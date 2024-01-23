@@ -8,14 +8,14 @@ template <typename T>  void PhysicsEngine::handleCollisionsWithArena(std::list<T
     for (it = ents.begin(); it != ents.end(); ++it) {
         T *current= (*it);
         SDL_FRect currBody=current->getBody();
-        if(box->getArena()->whereIsColliding(currBody)>0){
+        if(cont->getArena()->whereIsColliding(currBody)>0){
 	
     SDL_FPoint vec=current->getVec();
     
 //    std::cout<<current->getPos().x<<" , "<<current->getPos().y<<"\n";
-        int where=box->getArena()->whereIsColliding(currBody);
+        int where=cont->getArena()->whereIsColliding(currBody);
             current->bounce();
-            PhysicsAux::separateEntityFromCollider(current,box->getArena(),where);
+            PhysicsAux::separateEntityFromCollider(current,cont->getArena(),where);
     if (where==1) {
         GVector::Reflect(&vec, new GVector(-1.0f, 0.0f));
     } else if (where==2) {
@@ -173,8 +173,8 @@ void PhysicsEngine::handleGroundGravity(std::list<T*>& ents){
     typename std::list<T*>::iterator it;
     for (it = ents.begin(); it != ents.end(); ++it) {
         T *current= (*it);
-        PhysicsAux::accelerateEntity((box->getEarthParticle()),PhysicsAux::gravVector(current->getCenter(),box->getEarthParticle()->getCenter(),current->getMass(),box->getEarthParticle()->getMass()));
-        PhysicsAux::accelerateEntity((current),PhysicsAux::gravVector(box->getEarthParticle()->getCenter(),current->getCenter(),current->getMass(),box->getEarthParticle()->getMass()));
+        PhysicsAux::accelerateEntity((cont->getEarthParticle()),PhysicsAux::gravVector(current->getCenter(),cont->getEarthParticle()->getCenter(),current->getMass(),cont->getEarthParticle()->getMass()));
+        PhysicsAux::accelerateEntity((current),PhysicsAux::gravVector(cont->getEarthParticle()->getCenter(),current->getCenter(),current->getMass(),cont->getEarthParticle()->getMass()));
 
 
 
@@ -276,7 +276,7 @@ void PhysicsEngine::handleDrag(std::list<T*>& entList){
     typename std::list<T*>::iterator it;
     for (it = entList.begin(); it != entList.end(); ++it) {
 
-        SDL_FPoint dragVec=PhysicsAux::dragNeutralWindVector((*it)->getVec(),(*it)->getDragConstant(),box->getArena()->getAirDensity());
+        SDL_FPoint dragVec=PhysicsAux::dragNeutralWindVector((*it)->getVec(),(*it)->getDragConstant(),cont->getArena()->getAirDensity());
         PhysicsAux::accelerateEntity((*it),dragVec);
 
 
