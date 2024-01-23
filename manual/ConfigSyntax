@@ -1,0 +1,10 @@
+---Bullets:
+size mass inve Car
+---Guns:
+force barrelLen spread recoil reloadTime capacity shotcooldown
+---Colliders:
+r g b a x y width height espessura airdensity
+---entities:
+initvelocidade maxtamanho quantidade maxmassa
+
+

@@ -1,0 +1,22 @@
+
+
+     =============================Comandos de Spawning=============================================
+     Arma: G
+     Particula: S
+     Disparar armas disponiveis: DOWNARROW
+     Apagar objetos: D
+     ============================Comandos de efeitos:============================================
+     Toggle Gravity: E
+     Make explosion around mouse: M
+     Toggle collisions: C
+     Toggle gravity around mouse: LEFTARROW
+     Puxar particulas: RIGHTARROW
+     Toggle pause: P
+     Toggle selection mode: N
+     Toggle rendering: R
+     ============================Comandos de feedback:============================================
+     Mostrar energia total: J
+     Mostrar estado de todas as particulas: UPARROW
+     Mostrar ajuda: H
+     Mostrar estado da simulaçao: T
+     Informaçoes do ambiente: F

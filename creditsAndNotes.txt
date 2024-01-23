@@ -1,0 +1,77 @@
+
+Keyboard controls:
+
+https://stackoverflow.com/questions/3741055/inputs-in-sdl-on-key-pressed
+
+Multilayer Textures
+
+https://stackoverflow.com/questions/51121457/sdl-layered-rendering-system
+
+Chat GPT implemented workhorse tedious functions
+
+https://chat.openai.com/share/ca138f93-ddf2-4151-aec4-ac81b8fcd60b
+
+multithreading
+
+https://www.geeksforgeeks.org/multithreading-in-cpp/
+https://stackoverflow.com/questions/50175002/invalid-use-of-non-static-member-function-c-thread-linux
+https://stackoverflow.com/questions/61985888/why-the-compiler-complains-that-stdthread-arguments-must-be-invocable-after-co
+
+physics
+
+https://en.m.wikipedia.org/wiki/Inelastic_collision
+https://www.google.com/search?q=normal+vector+in+a+collision&oq=normal+vector+in+a+collision&aqs=chrome..69i57j0i15i22i30j0i390i650l3.10149j0j4&client=ms-android-samsung-gj-rev1&sourceid=chrome-mobile&ie=UTF-8
+https://en.m.wikipedia.org/wiki/Coefficient_of_restitution
+https://chat.openai.com/share/59786070-52db-4d0d-bd8a-d2c0809fb095
+
+lists
+
+https://cplusplus.com/reference/list/list/erase/
+
+https://cplusplus.com/reference/list/list/
+
+class Hierarchy
+
+makeFile knowledge:
+
+https://www.youtube.com/watch?v=DtGrdB8wQ_8
+
+build Of SDL used:
+
+
+https://github.com/libsdl-org/SDL/releases/tag/release-2.28.0
+
+
+https://chat.openai.com/share/19a67ae7-0baf-400e-815a-c28771dd93c5
+
+
+
+Nota: nao ha memory leaks deste programa. Só das bibliotecas externas de SDL que uso!
+
+
+Eu inicializo a gun com ponto 0,0 antes de lhe dar parsing com ficheiro. A posiçao lida e a correta so que a GUn nao usa isso para se orientar.
+
+
+
+Nao tenho leaks com as funcionalidades das armas!!!! Nem dos menus!!!!!
+
+
+
+
+Dar multithreading a cenas que apaguem objetos em real time nao e boa ideia. Tems de deixar apagar tudo antes de continuar. Sei que adicionar em multithreading nao faz mal.
+Vou experimentar multithreading a adicionar cenas.
+
+
+
+Devia adicionar lança misseis e lança granadas.
+
+Os lança granadas terão uma classe parecida com as Guns, só que nao teem calibre. (Teem granadas com propriedades fixas)
+
+Os lança granadas estão num std::vector sepadado das guns e as granadas que lançam tambem.
+
+As granadas atualizam e enquanto nao atingem um certo timer, nao explodem, e assim que explodem, exercem força para todas as direçoes no plano 2D a todas as entidades à volta.(durante um certo tempo)
+
+Os lança misseis sao a mesma coisa mas explodem em contacto com alguma coisa e sao teleguiados.
+
+Mas é muito trabalho nao vou adicionar.(O programa ficaria muito confuso e seria apenas um deposito de ideias. E quero que tenha
+estrutura. Nao adiciono mais cenas.)
