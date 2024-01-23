@@ -170,3 +170,23 @@ void PhysicsEngine::monitorMissiles(float tx,float ty){
 
 
 }
+
+
+void PhysicsEngine::hommingEnts(float x, float y){
+
+	homming<Entity>(cont->getEntityList(),x,y);
+
+}
+
+void PhysicsEngine::doBlastEnts(float x, float y,float intensity){
+
+
+	doBlast<Entity>(cont->getEntityList(),x,y,intensity);
+}
+
+void PhysicsEngine::orbitEnts(float x, float y){
+
+
+	orbit<Entity>(cont->getEntityList(),x,y);
+
+}

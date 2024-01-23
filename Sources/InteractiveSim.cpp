@@ -224,20 +224,20 @@ void InteractiveSim::doRendering(){
 
 }
 void InteractiveSim::handleContPresses(const Uint8*KEYS){
-  /*  if(KEYS[SDL_SCANCODE_LEFT]) {
-        std::thread orbitWorker(&EntityBox::orbit,this->playground->getBox(),mouseX*1.0,mouseY*1.0);
+     if(KEYS[SDL_SCANCODE_LEFT]) {
+        std::thread orbitWorker(&PhysicsEngine::orbitEnts,this->engine,mouseX*1.0,mouseY*1.0);
         orbitWorker.detach();
     }
     if(KEYS[SDL_SCANCODE_RIGHT]) {
 
-        std::thread hommingWorker(&EntityBox::homming,this->playground->getBox(),this->mouseX*1.0,this->mouseY*1.0);
+        std::thread hommingWorker(&PhysicsEngine::hommingEnts,this->engine,this->mouseX*1.0,this->mouseY*1.0);
         hommingWorker.detach();
     }
     if(KEYS[SDL_SCANCODE_M]) {
-        std::thread blastingWorker(&EntityBox::blast,this->playground->getBox(),this->mouseX*1.0,this->mouseY*1.0);
+        std::thread blastingWorker(&PhysicsEngine::doBlastEnts,this->engine,this->mouseX*1.0,this->mouseY*1.0,50000000);
         blastingWorker.detach();
     }
-    */
+    
 	if(KEYS[SDL_SCANCODE_DOWN]) {
         std::thread shootingWorker(&Arsenal::shootGuns,this->playground);
         shootingWorker.detach();

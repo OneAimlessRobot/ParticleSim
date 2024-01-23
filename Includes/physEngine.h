@@ -52,6 +52,14 @@ void monitorGrenades();
 void monitorMissiles(float tx,float ty);
 
 void updateEntities(int collisions,int gravity,int drag,int electricity,float tx, float ty);
+
+
+void hommingEnts(float x, float y);
+
+void doBlastEnts(float x, float y,float intensity);
+
+void orbitEnts(float x, float y);
+
 };
 #include "allSettings.h"
 #include "physEngine.tpp"
